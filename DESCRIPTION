@@ -1,0 +1,15 @@
+Package: yardlistr
+Type: Package
+Title: Generates Plots from eBird Data
+Version: 0.1.0
+Author: Gleb Ebert
+Maintainer: Gleb Ebert
+Description: The yardlistr package loads your personal eBird data from a csv
+    file, processes checklists from a user-specified list of locations and
+    generates a variety of plots for each location.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
