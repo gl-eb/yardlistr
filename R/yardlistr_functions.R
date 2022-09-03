@@ -29,6 +29,9 @@ tetrad <- function(x, method = "ebird") {
 }
 
 clean_ebird_data <- function(data_file, yard_location) {
+  message_file <- stringr::str_glue("Importing Data from ", data_file)
+  rlang::inform(message_file)
+
   # import latest ebird data
   raw_dat <- data_file |>
     readr::read_csv(show_col_types = FALSE) |>
