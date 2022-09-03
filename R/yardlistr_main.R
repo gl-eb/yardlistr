@@ -117,7 +117,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
   frequency_per_timeunit <- yardlist |>
     # select(-month_tetrad) |>
     bind_cols(matrix(NA, nrow = dim(yardlist)[1], ncol = n_timeunits)) |>
-    arrange(taxon)
+    arrange(taxon) |>
+    suppressMessages()
 
   # rename columns to numbers
   columns_kept <- c("species", "taxon")
@@ -309,7 +310,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   )
 
   plot_time_lists <- checklists |>
-    mutate(time = datetime |> get_time()) |> #
+    mutate(time = datetime |> get_time()) |>
     ggplot(aes(x = time)) +
     geom_histogram(bins = 24, fill = clr, color = "grey13") +
     scale_x_time(
@@ -320,7 +321,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
     theme(
       axis.title.y = element_blank()
     )
-  plot_time_lists
   ggsave(
     filename = path(
       dir_img,
@@ -333,7 +333,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
     height = 12.5,
     units = "cm",
     dpi = 300
-  )
+  ) |>
+  suppressWarnings()
 
   # plot heatmap
   plot_heatmap <- frequency_per_timeunit |>
@@ -368,7 +369,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
       strip.placement = "outside",
       legend.position = "right"
     )
-  # plot_heatmap
   ggsave(
     filename = path(
       dir_img,
@@ -411,7 +411,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
       plot.subtitle = element_text(hjust = 1),
       axis.title = element_blank()
     )
-  # plot_frequency
   ggsave(
     filename = path(
       dir_img,
