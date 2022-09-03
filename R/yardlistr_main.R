@@ -13,6 +13,10 @@
 #' @import ggplot2
 #' @importFrom fs path
 #'
+#' @examples
+#' \dontrun{
+#'   yardlistr("My Location", "./Data", "./Plots")
+#' }
 yardlistr <- function(location, dir_dat, dir_img) {
   # file system -------------------------------------------------------------
 

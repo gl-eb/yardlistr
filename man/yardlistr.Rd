@@ -21,3 +21,8 @@ A list containing the tibbles used to generate plots
 \description{
 Main yardlistr functions that calls all other helper functions
 }
+\examples{
+\dontrun{
+  yardlistr("My Location", "./Data", "./Plots")
+}
+}
