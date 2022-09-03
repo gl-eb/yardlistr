@@ -281,7 +281,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       ext = "png"
     ),
     plot = plot_count_time,
-    device = agg_png,
+    device = ragg::agg_png,
     width = 20,
     height = 12.5,
     units = "cm",
@@ -305,7 +305,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       ext = "png"
     ),
     plot = plot_count_lists,
-    device = agg_png,
+    device = ragg::agg_png,
     width = 20,
     height = 12.5,
     units = "cm",
@@ -331,7 +331,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       ext = "png"
     ),
     plot = plot_time_lists,
-    device = agg_png,
+    device = ragg::agg_png,
     width = 20,
     height = 12.5,
     units = "cm",
@@ -379,7 +379,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       ext = "png"
     ),
     plot = plot_heatmap,
-    device = agg_png,
+    device = ragg::agg_png,
     width = 25,
     height = plot_height,
     units = "cm",
@@ -421,7 +421,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       ext = "png"
     ),
     plot = plot_frequency,
-    device = agg_png,
+    device = ragg::agg_png,
     width = 20,
     height = plot_height,
     units = "cm",
