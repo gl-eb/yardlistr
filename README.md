@@ -74,3 +74,48 @@ for (location in list_locations) {
   yardlistr::yardlistr(location, dir_input, dir_output)
 }
 ```
+
+#### Species frequency
+
+The frequency plot lists all observed species at the specified location in
+descending order with a bar representing the percentage of complete checklists
+that a particular species occurs in.
+Species only observed in incidental checklists have a frequency of 0.0%.
+
+![Frequency plot](man/figures/location_frequency.png)
+
+#### Heatmap
+
+The heatmap plot is closely modeled after eBird's bar chart.
+For a given species, it displays the percentage of checklists (complete and
+incidental) that species occurs in for each tetrad of the year.
+The higher the frequency of a species in a certain tetrad is, the darker the
+colour will be.
+Each month consists of four tetrads that comprise the following days of the
+month: 1st - 7th, 8th - 14th, 15th - 21st, 22nd - last.
+
+![Heatmap](man/figures/location_heatmap.png)
+
+#### Species per list
+
+The species per list plot showcases the trajectory of number of species on your
+location life list versus number of checklists at the location.
+In some ways, it resembles a rarefaction curve.
+
+![Species per list](man/figures/location_lists.png)
+
+#### Species over time
+
+This plot is similar to the species per list plot but instead shows how the
+number of species on your location life list developed over time.
+Depending on how regularly you observe birds at the location, the two plots can
+look more or less similar.
+
+![Species over time](man/figures/location_time.png)
+
+#### Time of day
+
+The time of day plot shows the distribution of checklists throughout the day,
+rounded to the nearest hour (e.g. both 6:33 and 7:29 round to 7:00).
+
+![Time of day](man/figures/location_lists_time.png)
