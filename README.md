@@ -54,3 +54,23 @@ The location name must be exactly the same as on eBird.
 library(yardlistr)
 yardlistr("My Location", "path/to/data_directory", "path/to/output_directory")
 ```
+
+You can also set up a list with multiple locations and pass them to yardlistr
+one by one.
+
+``` r
+library(yardlistr)
+
+dir_input <- "./dir_data"
+dir_output <- "./dir_plots"
+
+list_locations <- c(
+  "My yard",
+  "My friend's yard",
+  "My local hotspot"
+)
+
+for (location in list_locations) {
+  yardlistr::yardlistr(location, dir_input, dir_output)
+}
+```
