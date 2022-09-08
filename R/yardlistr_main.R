@@ -24,14 +24,13 @@ yardlistr <- function(location, dir_dat, dir_img) {
   dir_dat <- dir_dat |> fs::as_fs_path()
   dir_img <- dir_img |> fs::as_fs_path()
 
-  # get all ebird files
-  files <- fs::dir_ls(dir_dat)
-
+  # select file for data import
+  file_data <- select_file(dir_dat)
 
   # basic data wrangling ----------------------------------------------------
 
   # import and clean ebird data
-  dat <- clean_ebird_data(files[length(files)], location)
+  dat <- clean_ebird_data(file_data, location)
 
   # inform user which location is being worked on
   rlang::inform(stringr::str_glue("Analyzing data for ", location))
