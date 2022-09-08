@@ -28,6 +28,13 @@ tetrad <- function(x, method = "ebird") {
   }
 }
 
+# make best guess which file from input folder to use
+select_file <- function(dir_dat) {
+  # get all files with csv suffix and return last one
+  files <- fs::dir_ls(dir_dat, type = "file", glob = "*.csv")
+  return(files[length(files)])
+}
+
 clean_ebird_data <- function(data_file, yard_location) {
   message_file <- stringr::str_glue("Importing Data from ", data_file)
   rlang::inform(message_file)
