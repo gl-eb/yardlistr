@@ -86,8 +86,7 @@ check_location <- function(raw_dat, yard_location,
 
   if (dim(dat_location)[1] == 0) {
     message_location <- stringr::str_glue(
-      "Location", yard_location, "not found in eBird data",
-      sep = " "
+      "Location {yard_location} not found in eBird data"
     )
     rlang::abort(message_location, call = call)
   }

@@ -33,7 +33,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   dat <- clean_ebird_data(file_data, location)
 
   # inform user which location is being worked on
-  rlang::inform(stringr::str_glue("Analyzing data for ", location))
+  rlang::inform(stringr::str_glue("Analyzing data for {location}"))
 
   # list of unique checklist
   checklists <- dat |>
