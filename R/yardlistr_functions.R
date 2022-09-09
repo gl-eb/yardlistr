@@ -1,4 +1,4 @@
-# functions ---------------------------------------------------------------
+# universal functions -----------------------------------------------------
 
 # return list of unique values without changing their type
 unique_values <- function(x) x |> unique() |> tibble::deframe() |> sort()
@@ -28,6 +28,9 @@ tetrad <- function(x, method = "ebird") {
   }
 }
 
+
+# specific functions ------------------------------------------------------
+
 # make best guess which file from input folder to use
 select_file <- function(dir_dat) {
   # get all files with csv suffix and return last one
@@ -35,7 +38,8 @@ select_file <- function(dir_dat) {
   return(files[length(files)])
 }
 
-clean_ebird_data <- function(data_file, yard_location) {
+clean_ebird_data <- function(data_file, yard_location,
+                             call = rlang::caller_env()) {
   message_file <- stringr::str_glue("Importing Data from ", data_file)
   rlang::inform(message_file)
 
@@ -44,8 +48,11 @@ clean_ebird_data <- function(data_file, yard_location) {
     readr::read_csv(show_col_types = FALSE) |>
     suppressWarnings()
 
+  # filter data by location
+  dat_location <- check_location(raw_dat, yard_location, call)
+
   # filter data by location and sort by datetime
-  dat <- raw_dat |>
+  dat_cleaned <- dat_location |>
     rename(
       "common" = "Common Name",
       "scientific" = "Scientific Name",
@@ -53,9 +60,8 @@ clean_ebird_data <- function(data_file, yard_location) {
       "complete" = "All Obs Reported"
     ) |>
     filter(
-      Location == yard_location & # only selected location
-        !stringr::str_detect(scientific, "sp.") & # filter out spuhs
-        !stringr::str_detect(scientific, "/") # filter out slashes
+      !stringr::str_detect(scientific, "sp.") & # filter out spuhs
+      !stringr::str_detect(scientific, "/") # filter out slashes
     ) |>
     tidyr::drop_na(any_of(c("Date", "Time"))) |>
     tidyr::unite("datetime", Date:Time, sep = " ") |>
@@ -71,4 +77,18 @@ clean_ebird_data <- function(data_file, yard_location) {
     ) |>
     tidyr::unite("species", c("common", "scientific"), sep = " ") |>
     tidyr::unite("month_tetrad", c("month", "tetrad"), remove = FALSE)
+}
+
+# check if specified location is present in data
+check_location <- function(raw_dat, yard_location, call) {
+  dat_location <- raw_dat |> dplyr::filter(Location == yard_location)
+
+  if (dim(dat_location)[1] == 0) {
+    message_location <- stringr::str_glue(
+      "Location {yard_location} not found in eBird data"
+    )
+    rlang::abort(message_location, call = call)
+  }
+
+  return(dat_location)
 }
