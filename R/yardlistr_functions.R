@@ -38,7 +38,8 @@ select_file <- function(dir_dat) {
   return(files[length(files)])
 }
 
-clean_ebird_data <- function(data_file, yard_location) {
+clean_ebird_data <- function(data_file, yard_location,
+                             call = rlang::caller_env()) {
   message_file <- stringr::str_glue("Importing Data from ", data_file)
   rlang::inform(message_file)
 
@@ -47,8 +48,11 @@ clean_ebird_data <- function(data_file, yard_location) {
     readr::read_csv(show_col_types = FALSE) |>
     suppressWarnings()
 
+  # filter data by location
+  dat_location <- check_location(raw_dat, yard_location)
+
   # filter data by location and sort by datetime
-  dat <- raw_dat |>
+  dat_cleaned <- dat_location |>
     rename(
       "common" = "Common Name",
       "scientific" = "Scientific Name",
@@ -56,9 +60,8 @@ clean_ebird_data <- function(data_file, yard_location) {
       "complete" = "All Obs Reported"
     ) |>
     filter(
-      Location == yard_location & # only selected location
-        !stringr::str_detect(scientific, "sp.") & # filter out spuhs
-        !stringr::str_detect(scientific, "/") # filter out slashes
+      !stringr::str_detect(scientific, "sp.") & # filter out spuhs
+      !stringr::str_detect(scientific, "/") # filter out slashes
     ) |>
     tidyr::drop_na(any_of(c("Date", "Time"))) |>
     tidyr::unite("datetime", Date:Time, sep = " ") |>
