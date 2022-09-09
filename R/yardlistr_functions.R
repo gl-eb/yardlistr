@@ -1,4 +1,4 @@
-# functions ---------------------------------------------------------------
+# universal functions -----------------------------------------------------
 
 # return list of unique values without changing their type
 unique_values <- function(x) x |> unique() |> tibble::deframe() |> sort()
@@ -27,6 +27,9 @@ tetrad <- function(x, method = "ebird") {
     tetrads <- ceiling(lubridate::day(x) / 7) %>% replace(. == 5, 4)
   }
 }
+
+
+# specific functions ------------------------------------------------------
 
 # make best guess which file from input folder to use
 select_file <- function(dir_dat) {
