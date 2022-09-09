@@ -49,7 +49,7 @@ clean_ebird_data <- function(data_file, yard_location,
     suppressWarnings()
 
   # filter data by location
-  dat_location <- check_location(raw_dat, yard_location)
+  dat_location <- check_location(raw_dat, yard_location, call)
 
   # filter data by location and sort by datetime
   dat_cleaned <- dat_location |>
@@ -80,8 +80,7 @@ clean_ebird_data <- function(data_file, yard_location,
 }
 
 # check if specified location is present in data
-check_location <- function(raw_dat, yard_location,
-                           call = rlang::caller_env()) {
+check_location <- function(raw_dat, yard_location, call) {
   dat_location <- raw_dat |> dplyr::filter(Location == yard_location)
 
   if (dim(dat_location)[1] == 0) {

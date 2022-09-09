@@ -17,7 +17,7 @@
 #' \dontrun{
 #'   yardlistr("My Location", "./Data", "./Plots")
 #' }
-yardlistr <- function(location, dir_dat, dir_img, call = rlang::caller_env()) {
+yardlistr <- function(location, dir_dat, dir_img) {
   # file system -------------------------------------------------------------
 
   # set data directories
