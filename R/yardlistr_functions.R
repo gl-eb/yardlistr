@@ -75,3 +75,19 @@ clean_ebird_data <- function(data_file, yard_location) {
     tidyr::unite("species", c("common", "scientific"), sep = " ") |>
     tidyr::unite("month_tetrad", c("month", "tetrad"), remove = FALSE)
 }
+
+# check if specified location is present in data
+check_location <- function(raw_dat, yard_location,
+                           call = rlang::caller_env()) {
+  dat_location <- raw_dat |> dplyr::filter(Location == yard_location)
+
+  if (dim(dat_location)[1] == 0) {
+    message_location <- stringr::str_glue(
+      "Location", yard_location, "not found in eBird data",
+      sep = " "
+    )
+    rlang::abort(message_location, call = call)
+  }
+
+  return(dat_location)
+}
