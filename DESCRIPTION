@@ -1,6 +1,6 @@
 Package: yardlistr
 Type: Package
-Title: Generates Plots from eBird Data
+Title: Generate Summary Plots from eBird Data
 Version: 0.1.0
 Author: Gleb Ebert
 Maintainer: Gleb Ebert <gleb.ebert@proton.me>
@@ -12,7 +12,7 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 4.1.0)
-Imports: 
+Imports:
     dplyr,
     forcats,
     fs,
@@ -27,7 +27,7 @@ Imports:
     tibble,
     tidyr,
     viridisLite
-Suggests: 
+Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
