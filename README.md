@@ -101,7 +101,6 @@ Depending on how regularly you observe birds at the location, the two plots can 
 
 #### Time of day
 
-The time of day plot shows the distribution of checklists throughout the day,
-rounded to the nearest hour (e.g. both 6:33 and 7:29 round to 7:00).
+The time of day plot shows the distribution of checklists throughout the day.
 
 ![Time of day](man/figures/location_lists_time.png)

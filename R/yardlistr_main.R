@@ -301,24 +301,33 @@ yardlistr <- function(location, dir_dat, dir_img) {
     dpi = 300
   )
 
-  plot_time_lists <- checklists |>
+  plot_time_of_day <- checklists |>
     mutate(time = datetime |> get_time()) |>
     ggplot(aes(x = time)) +
-    geom_histogram(bins = 24, fill = clr, color = "grey13") +
+    stat_bin(
+      geom = "bar",
+      boundary = lubridate::hms("00:00:00"),
+      closed = "left",
+      binwidth = lubridate::hours(1),
+      fill = clr,
+      color = "grey13"
+    ) +
     scale_x_time(
-      limits = c(lubridate::hours(0), lubridate::hours(23)),
+      limits = c(lubridate::hms("00:00:00"), lubridate::hms("24:00:00")),
+      breaks = scales::breaks_width("4 hours"),
       labels = scales::label_time(format = "%H:%M")
     ) +
+    labs(x = "Time of Day") +
     theme(
       axis.title.y = element_blank()
     )
   ggsave(
     filename = path(
       dir_img,
-      paste0(location_short, "_lists_time"),
+      paste0(location_short, "_time-of-day"),
       ext = "png"
     ),
-    plot = plot_time_lists,
+    plot = plot_time_of_day,
     device = ragg::agg_png,
     width = 20,
     height = 12.5,
