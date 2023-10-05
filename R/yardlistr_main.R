@@ -222,17 +222,10 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # clr <- "#65A630FF" # eBird green
 
   # define common theme used for all plots
-  plot_theme <- theme_light() +
-    theme(
-      axis.text = element_text(size = 11),
-      axis.title = element_text(size = 13),
-      plot.title = element_text(size = 15),
-      plot.subtitle = element_text(size = 13)
-    )
+  theme_light(13) |> theme_set()
 
   # dark theme for heatmap plot
-  # plot_theme_heatmap_dark <- plot_theme +
-  #   theme_minimal() +
+  # plot_theme_heatmap_dark <- theme_minimal(13) +
   #   theme(
   #     plot.background = element_rect(fill = "grey10"),
   #     text = element_text(color = "grey87"),
@@ -243,8 +236,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   #   )
 
   # light theme for heatmap plot
-  plot_theme_heatmap_light <- plot_theme +
-    theme_minimal() +
+  plot_theme_heatmap_light <- theme_minimal(13) +
     theme(
       plot.background = element_rect(fill = "white"),
       # text = element_text(color = "grey87"),
@@ -271,8 +263,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       title = paste0("Yard list at ", location),
       x = "Date",
       y = "Species"
-    ) +
-    plot_theme
+    )
   ggsave(
     filename = path(
       dir_img,
@@ -295,8 +286,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       title = paste0("Yard list at ", location),
       x = "Checklists",
       y = "Species"
-    ) +
-    plot_theme
+    )
   ggsave(
     filename = path(
       dir_img,
@@ -319,7 +309,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
       limits = c(lubridate::hours(0), lubridate::hours(23)),
       labels = scales::label_time(format = "%H:%M")
     ) +
-    plot_theme +
     theme(
       axis.title.y = element_blank()
     )
@@ -407,7 +396,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
       title = "Species frequency in complete checklists",
       subtitle = location
     ) +
-    plot_theme +
     theme(
       plot.title = element_text(hjust = 1),
       plot.subtitle = element_text(hjust = 1),
