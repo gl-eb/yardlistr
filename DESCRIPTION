@@ -1,9 +1,16 @@
 Package: yardlistr
 Type: Package
 Title: Generate Summary Plots from eBird Data
-Version: 0.1.0
-Author: Gleb Ebert
-Maintainer: Gleb Ebert <gleb.ebert@proton.me>
+Version: 0.1.0.9000
+Authors@R: c(
+    person(
+        given = "Gleb G.",
+        family = "Ebert",
+        role = c("aut", "cre", "cph"),
+        email = "dev@gl-eb.me",
+        comment = c(ORCID = "0000-0002-7734-3824")
+    )
+  )
 Description: The yardlistr package loads your personal eBird data from a csv
     file, processes checklists from a user-specified list of locations and
     generates a variety of plots for each location.
@@ -31,3 +38,5 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
+URL: https://github.com/gl-eb/yardlistr
+BugReports: https://github.com/gl-eb/yardlistr/issues
