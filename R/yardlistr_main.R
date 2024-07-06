@@ -9,9 +9,7 @@
 #' @return A list containing the tibbles used to generate plots
 #' @export
 #'
-#' @import dplyr
 #' @import ggplot2
-#' @importFrom fs path
 #'
 #' @examples
 #' \dontrun{
@@ -39,11 +37,11 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # list of unique checklist
   checklists <- dat |>
     select(datetime, complete) |>
-    unique()
+    dplyr::distinct()
   complete <- checklists |>
     filter(complete == 1)
   # tibble to store count by timepoint
-  yardcount <- tibble(
+  yardcount <- tibble::tibble(
     observation = seq_len(dim(checklists)[1]),
     datetime = lubridate::floor_date(checklists$datetime, unit = "day"),
     species_num = numeric(dim(checklists)[1]),
@@ -65,13 +63,13 @@ yardlistr <- function(location, dir_dat, dir_img) {
     current_species <- dat |>
       filter(datetime == tibble::deframe(checklists[i, "datetime"])) |>
       select(c("species", "taxon")) |>
-      unique()
+      dplyr::distinct()
     # check if any of them have not been seen before
     new_species <- current_species |>
-      anti_join(yardlist, by = c("species", "taxon"))
+      dplyr::anti_join(yardlist, by = c("species", "taxon"))
     # add new species to life list
     yardlist <- yardlist |>
-      bind_rows(new_species)
+      dplyr::bind_rows(new_species)
 
     # add number of new species to previous yard count
     if (i == 1) {
@@ -97,30 +95,39 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # count checklists for each timeunit
   checklists_per_timeunit <- dat |>
     select(datetime, month_tetrad) |>
-    group_by(month_tetrad) |>
-    unique() |>
-    count() |>
-    ungroup()
+    dplyr::group_by(month_tetrad) |>
+    dplyr::distinct() |>
+    dplyr::count() |>
+    dplyr::ungroup()
   checklists_per_timeunit <- checklists_per_timeunit |>
-    full_join(
-      timeunits |> anti_join(checklists_per_timeunit, by = "month_tetrad"),
+    dplyr::full_join(
+      dplyr::anti_join(
+        x = timeunits,
+        y = checklists_per_timeunit,
+        by = "month_tetrad"
+      ),
       by = c("month_tetrad", "n")
     ) |>
     mutate(frequency = n / max(n, na.rm = TRUE)) |>
-    arrange(month_tetrad) |>
+    dplyr::arrange(month_tetrad) |>
     select(c(month_tetrad, frequency)) |>
     tidyr::pivot_wider(names_from = month_tetrad, values_from = frequency) |>
     tibble::add_column(
       species = c("Checklists"),
       taxon = c(0)
     ) |>
-    relocate(c("species", "taxon"), .before = everything())
+    dplyr::relocate(
+      c("species", "taxon"),
+      .before = tidyselect::everything()
+    )
 
   # count species frequency per tetrad
   frequency_per_timeunit <- yardlist |>
     # select(-month_tetrad) |>
-    bind_cols(matrix(NA, nrow = dim(yardlist)[1], ncol = n_timeunits)) |>
-    arrange(taxon) |>
+    dplyr::bind_cols(
+      matrix(NA, nrow = dim(yardlist)[1], ncol = n_timeunits)
+    ) |>
+    dplyr::arrange(taxon) |>
     suppressMessages()
 
   # rename columns to numbers
@@ -131,7 +138,9 @@ yardlistr <- function(location, dir_dat, dir_img) {
   for (i in seq_along(timeunits$month_tetrad)) {
     # filter out current timeunits's data
     dat_timeunit <- dat |>
-      filter(month_tetrad == tibble::deframe(timeunits[i, "month_tetrad"]))
+      filter(
+        month_tetrad == tibble::deframe(timeunits[i, "month_tetrad"])
+      )
 
     # count number of checklists during timeunit
     n_checklists <- dat_timeunit |>
@@ -141,18 +150,18 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
     # normalize species frequency to checklist number
     dat_timeunit <- dat_timeunit |>
-      add_count(species) |>
+      dplyr::add_count(species) |>
       mutate(frequency = n / n_checklists) |>
       select(c(species, taxon, frequency)) |>
-      unique()
+      dplyr::distinct()
 
     # add species not seen in current tetrad
     dat_timeunit <- dat_timeunit |>
-      full_join(
-        yardlist |> anti_join(dat_timeunit, by = c("species", "taxon")),
+      dplyr::full_join(
+        yardlist |> dplyr::anti_join(dat_timeunit, by = c("species", "taxon")),
         by = c("species", "taxon")
       ) |>
-      arrange(taxon)
+      dplyr::arrange(taxon)
 
     # convert NAs to 0 if at least one checklist present in current tetrad
     if (n_checklists > 0) {
@@ -173,12 +182,12 @@ yardlistr <- function(location, dir_dat, dir_img) {
       names_to = "month_tetrad",
       values_to = "frequency"
     ) |>
-    arrange(taxon) |>
+    dplyr::arrange(taxon) |>
     mutate(
       species = species |> forcats::as_factor() |> forcats::fct_rev(),
       frequency = as.numeric(frequency)
     ) |>
-    left_join(timeunits, by = c("month_tetrad")) |>
+    dplyr::left_join(timeunits, by = c("month_tetrad")) |>
     select(-n)
 
 
@@ -202,10 +211,10 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # get overall frequency
   frequency_year <- dat |>
     filter(complete == 1) |>
-    count(species, taxon) |>
-    full_join(yardlist, by = c("species", "taxon")) |>
+    dplyr::count(species, taxon) |>
+    dplyr::full_join(yardlist, by = c("species", "taxon")) |>
     tidyr::replace_na(list(n = 0)) |>
-    arrange(desc(n), taxon) %>%
+    dplyr::arrange(dplyr::desc(n), taxon) |>
     mutate(
       species = species |> forcats::as_factor() |> forcats::fct_rev(),
       frequency = n / complete |>
@@ -266,7 +275,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       y = "Species"
     )
   ggsave(
-    filename = path(
+    filename = fs::path(
       dir_img,
       paste0(location_short, "_time"),
       ext = "png"
@@ -289,7 +298,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       y = "Species"
     )
   ggsave(
-    filename = path(
+    filename = fs::path(
       dir_img,
       paste0(location_short, "_lists"),
       ext = "png"
@@ -323,7 +332,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       axis.title.y = element_blank()
     )
   ggsave(
-    filename = path(
+    filename = fs::path(
       dir_img,
       paste0(location_short, "_time-of-day"),
       ext = "png"
@@ -370,7 +379,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       legend.position = "right"
     )
   ggsave(
-    filename = path(
+    filename = fs::path(
       dir_img,
       paste0(location_short, "_heatmap"),
       ext = "png"
@@ -411,7 +420,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
       axis.title = element_blank()
     )
   ggsave(
-    filename = path(
+    filename = fs::path(
       dir_img,
       paste0(location_short, "_frequency"),
       ext = "png"

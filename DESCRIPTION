@@ -20,6 +20,7 @@ Imports:
     fs,
     ggplot2,
     lubridate,
+    magrittr,
     purrr,
     ragg,
     readr,
@@ -28,6 +29,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     viridisLite
 Suggests:
     testthat (>= 3.0.0)

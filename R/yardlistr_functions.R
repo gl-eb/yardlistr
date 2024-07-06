@@ -3,16 +3,16 @@
 # return list of unique values without changing their type
 unique_values <- function(x) {
   x |>
-    unique() |>
+    dplyr::distinct() |>
     tibble::deframe() |>
     sort()
 }
 
 # extract time from lubridate datetime
 get_time <- function(time = lubridate::now()) {
-  time %>%
-    stringr::str_split(" ") %>%
-    purrr::map_chr(2) %>%
+  time |>
+    stringr::str_split(" ") |>
+    purrr::map_chr(2) |>
     lubridate::hms()
 }
 
@@ -55,7 +55,7 @@ clean_ebird_data <- function(data_file, yard_location,
 
   # filter data by location and sort by datetime
   dat_cleaned <- dat_location |>
-    rename(
+    dplyr::rename(
       "common" = "Common Name",
       "scientific" = "Scientific Name",
       "taxon" = "Taxonomic Order",
@@ -65,9 +65,9 @@ clean_ebird_data <- function(data_file, yard_location,
       !stringr::str_detect(scientific, "sp.") & # filter out spuhs
       !stringr::str_detect(scientific, "/") # filter out slashes
     ) |>
-    tidyr::drop_na(any_of(c("Date", "Time"))) |>
+    tidyr::drop_na(tidyselect::any_of(c("Date", "Time"))) |>
     tidyr::unite("datetime", Date:Time, sep = " ") |>
-    arrange(datetime) |>
+    dplyr::arrange(datetime) |>
     select(c("common", "scientific", "taxon", "datetime", "complete")) |>
     mutate(
       datetime = datetime |> lubridate::ymd_hms(),
@@ -83,7 +83,7 @@ clean_ebird_data <- function(data_file, yard_location,
 
 # check if specified location is present in data
 check_location <- function(raw_dat, yard_location, call) {
-  dat_location <- raw_dat |> dplyr::filter(Location == yard_location)
+  dat_location <- raw_dat |> filter(Location == yard_location)
 
   if (dim(dat_location)[1] == 0) {
     cli::cli_abort(
