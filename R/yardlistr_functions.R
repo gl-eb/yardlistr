@@ -45,9 +45,6 @@ select_file <- function(dir_dat) {
 
 clean_ebird_data <- function(data_file, yard_location,
                              call = rlang::caller_env()) {
-  message_file <- stringr::str_glue("Importing Data from ", data_file)
-  rlang::inform(message_file)
-
   # import latest ebird data
   raw_dat <- data_file |>
     readr::read_csv(show_col_types = FALSE) |>
@@ -89,10 +86,10 @@ check_location <- function(raw_dat, yard_location, call) {
   dat_location <- raw_dat |> dplyr::filter(Location == yard_location)
 
   if (dim(dat_location)[1] == 0) {
-    message_location <- stringr::str_glue(
-      "Location {yard_location} not found in eBird data"
+    cli::cli_abort(
+      "Location {.val {yard_location}} not found in eBird data",
+      call = call
     )
-    rlang::abort(message_location, call = call)
   }
 
   return(dat_location)
