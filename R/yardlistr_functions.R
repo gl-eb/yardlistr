@@ -1,7 +1,12 @@
 # universal functions -----------------------------------------------------
 
 # return list of unique values without changing their type
-unique_values <- function(x) x |> unique() |> tibble::deframe() |> sort()
+unique_values <- function(x) {
+  x |>
+    unique() |>
+    tibble::deframe() |>
+    sort()
+}
 
 # extract time from lubridate datetime
 get_time <- function(time = lubridate::now()) {
