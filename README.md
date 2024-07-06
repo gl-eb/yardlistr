@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/gl-eb/yardlistr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gl-eb/yardlistr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The yardlistr package reads your eBird data and produces a number of

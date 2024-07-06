@@ -6,3 +6,4 @@
 ^\.lintr$
 ^.*\.code-workspace$
 ^README\.Rmd$
+^\.github$
