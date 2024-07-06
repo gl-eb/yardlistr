@@ -258,7 +258,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   plot_count_time <- yardcount |>
     ggplot(aes(x = datetime, y = species_num)) +
-    geom_step(size = 1, color = clr) +
+    geom_step(linewidth = 1, color = clr) +
     labs(
       title = paste0("Yard list at ", location),
       x = "Date",
@@ -281,7 +281,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   plot_count_lists <- yardcount |>
     ggplot(aes(x = observation, y = species_num)) +
-    geom_step(size = 1, color = clr) +
+    geom_step(linewidth = 1, color = clr) +
     labs(
       title = paste0("Yard list at ", location),
       x = "Checklists",
@@ -333,8 +333,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
     height = 12.5,
     units = "cm",
     dpi = 300
-  ) |>
-  suppressWarnings()
+  )
 
   # plot heatmap
   plot_heatmap <- frequency_per_timeunit |>
