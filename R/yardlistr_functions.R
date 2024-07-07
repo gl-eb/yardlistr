@@ -29,7 +29,7 @@ tetrad <- function(x, method = "ebird") {
     # the "ebird" method takes day 1-7 as tetrad 1, 8-14 as tetrad 2, 15-21 as
     # tetrad 3 and >21 as tetrad 4. This method is employed by the Cornell Lab
     # of Ornithology in their bar charts on the eBird platform
-    tetrads <- ceiling(lubridate::day(x) / 7) |> {\(x) replace(x, x == 5, 4)}()
+    tetrads <- ceiling(lubridate::day(x) / 7) |> (\(x) replace(x, x == 5, 4))()
   }
 }
 
@@ -63,7 +63,7 @@ clean_ebird_data <- function(data_file, yard_location,
     ) |>
     filter(
       !stringr::str_detect(.data$scientific, "sp.") & # filter out spuhs
-      !stringr::str_detect(.data$scientific, "/") # filter out slashes
+        !stringr::str_detect(.data$scientific, "/") # filter out slashes
     ) |>
     tidyr::drop_na(tidyselect::any_of(c("Date", "Time"))) |>
     tidyr::unite("datetime", "Date":"Time", sep = " ") |>

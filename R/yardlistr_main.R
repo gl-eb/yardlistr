@@ -273,7 +273,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   )
 
   plot_time_of_day <- checklists |>
-    mutate(time = .data$datetime |> get_time()) |>
+    mutate(time = get_time(.data$datetime)) |>
     ggplot2::ggplot(aes(x = .data$time)) +
     ggplot2::stat_bin(
       geom = "bar",
@@ -312,7 +312,9 @@ yardlistr <- function(location, dir_dat, dir_img) {
       month_label = lubridate::month(.data$month, label = TRUE) |>
         forcats::as_factor()
     ) |>
-    ggplot2::ggplot(aes(x = .data$tetrad, y = .data$species, fill = .data$frequency)) +
+    ggplot2::ggplot(
+      aes(x = .data$tetrad, y = .data$species, fill = .data$frequency)
+    ) +
     ggplot2::facet_grid(
       cols = ggplot2::vars(.data$month_label),
       scales = "free_x",

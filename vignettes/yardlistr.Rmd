@@ -56,8 +56,7 @@ list_locations <- c(
 )
 
 list_locations |> purrr::walk(
-  \(location)
-  yardlistr::yardlistr(location, dir_input, dir_output)
+  \(location) yardlistr::yardlistr(location, dir_input, dir_output)
 )
 ```
 
