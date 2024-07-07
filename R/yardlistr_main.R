@@ -219,13 +219,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # define common theme used for all plots
   theme_light(13) |> theme_set()
 
-  # light theme for heatmap plot
-  plot_theme_heatmap_light <- theme_minimal(13) +
-    theme(
-      plot.background = element_rect(fill = "white"),
-      strip.text = element_text(size = 11)
-    )
-
   # height of plot upon export scales with number of species
   plot_height <- max(10, round(dim(yardlist)[1] / 10) * 5)
 
@@ -341,15 +334,17 @@ yardlistr <- function(location, dir_dat, dir_img) {
       title = "Species occurence by tetrad",
       subtitle = location
     ) +
-    plot_theme_heatmap_light +
+    theme_minimal(13) +
     theme(
+      plot.background = element_rect(fill = "white"),
+      panel.spacing = unit(0, "null"),
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
-      axis.text.x = element_blank(),
-      axis.title = element_blank(),
-      panel.spacing = unit(0, "null"),
       strip.placement = "outside",
-      legend.position = "right"
+      strip.text = element_text(size = 11),
+      legend.position = "right",
+      axis.text.x = element_blank(),
+      axis.title = element_blank()
     )
   ggsave(
     filename = fs::path(
