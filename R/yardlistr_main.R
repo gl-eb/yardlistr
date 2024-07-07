@@ -398,4 +398,12 @@ yardlistr <- function(location, dir_dat, dir_img) {
     units = "cm",
     dpi = 300
   )
+
+  # return tibbles used for plotting
+  list_plot_data <- list(
+    "yardcount" = yardcount,
+    "checklists" = checklists,
+    "frequency_per_timeunit" = frequency_per_timeunit,
+    "frequency_year" = frequency_year
+  )
 }
