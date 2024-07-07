@@ -126,7 +126,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # count species frequency per tetrad
   frequency_per_timeunit <- yardlist |>
-    # select(-month_tetrad) |>
     dplyr::bind_cols(
       matrix(NA, nrow = dim(yardlist)[1], ncol = n_timeunits)
     ) |>
@@ -196,21 +195,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # frequency ranking -------------------------------------------------------
 
-  # get overall frequency from frequency per timeunit
-  # frequency_year <- frequency_per_timeunit |>
-  #   pivot_wider(
-  #     id_cols = c("species", "taxon"),
-  #     names_from = "month_tetrad",
-  #     values_from = "frequency"
-  #   ) |>
-  #   rowwise(c("species", "taxon")) |>
-  #   summarise(frequency = sum(c_across("1_1":last_col()), na.rm = TRUE)) |>
-  #   # select(c("species", "taxon", "frequency")) |>
-  #   mutate(
-  #     frequency = (frequency * stats_checklists$max) / stats_checklists$total
-  #   ) |>
-  #   filter(species != "Checklists")
-
   # get overall frequency
   frequency_year <- dat |>
     filter(complete == 1) |>
@@ -231,30 +215,14 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # custom color for plot elements
   clr <- viridisLite::mako(1, begin = 0.7)
-  # clr <- "#65A630FF" # eBird green
 
   # define common theme used for all plots
   theme_light(13) |> theme_set()
-
-  # dark theme for heatmap plot
-  # plot_theme_heatmap_dark <- theme_minimal(13) +
-  #   theme(
-  #     plot.background = element_rect(fill = "grey10"),
-  #     text = element_text(color = "grey87"),
-  #     panel.border = element_rect(color = "grey20", fill = "#00000000"),
-  #     panel.grid = element_line(color = "grey20"),
-  #     axis.text = element_text(color = "grey87"),
-  #     strip.text = element_text(size = 11, color = "grey87")
-  #   )
 
   # light theme for heatmap plot
   plot_theme_heatmap_light <- theme_minimal(13) +
     theme(
       plot.background = element_rect(fill = "white"),
-      # text = element_text(color = "grey87"),
-      # panel.border = element_rect(color = "grey20", fill = "#00000000"),
-      # panel.grid = element_line(color = "grey20"),
-      # axis.text = element_text(color = "grey87"),
       strip.text = element_text(size = 11)
     )
 
@@ -362,7 +330,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
     geom_raster() +
     scale_x_continuous(expand = c(0, 0)) +
     scale_y_discrete(expand = c(0, 0)) +
-    # scale_fill_viridis_c(option = "magma", na.value = "#00000000") +
     scale_fill_viridis_c(
       option = "mako",
       na.value = "#00000000",
