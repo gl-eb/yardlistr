@@ -2,3 +2,14 @@ url: https://www.gl-eb.me/yardlistr/
 template:
   bootstrap: 5
 
+reference:
+  - title: Main Function
+    contents:
+    - yardlistr
+  - title: Helper Functions
+    desc: >
+      These functions are usually called from within the `yardlistr()`
+      function, but could be useful in other contexts.
+    contents:
+    - clean_ebird_data
+    - tetrad

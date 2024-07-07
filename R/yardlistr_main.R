@@ -1,4 +1,4 @@
-#' Main yardlistr functions that calls all other helper functions
+#' Main yardlistr functions for reading, analysing and plotting eBird data
 #'
 #' @param location (character) Name of location as it appears in eBird data
 #' @param dir_dat (character) Relative or absolute path to directory containing
@@ -19,6 +19,12 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # set data directories
   dir_dat <- dir_dat |> fs::as_fs_path()
   dir_img <- dir_img |> fs::as_fs_path()
+
+  # check file paths
+  check_dir_exists(dir_dat)
+  if (!fs::dir_exists(dir_img)) {
+    fs::dir_create(dir_img)
+  }
 
   # select file for data import
   file_data <- select_file(dir_dat)
@@ -400,6 +406,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
     units = "cm",
     dpi = 300
   )
+
+  cli::cli_alert_success("Saved plots to {.file {dir_img}}")
 
   # return tibbles used for plotting
   list_plot_data <- list(

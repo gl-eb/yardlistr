@@ -2,7 +2,7 @@
 % Please edit documentation in R/yardlistr_main.R
 \name{yardlistr}
 \alias{yardlistr}
-\title{Main yardlistr functions that calls all other helper functions}
+\title{Main yardlistr functions for reading, analysing and plotting eBird data}
 \usage{
 yardlistr(location, dir_dat, dir_img)
 }
@@ -19,7 +19,7 @@ plots should be saved}
 A list containing the tibbles used to generate plots
 }
 \description{
-Main yardlistr functions that calls all other helper functions
+Main yardlistr functions for reading, analysing and plotting eBird data
 }
 \examples{
 \dontrun{
