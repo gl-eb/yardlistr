@@ -5,6 +5,6 @@
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
-#' @importFrom magrittr %>%
+#' @importFrom rlang .data
 ## usethis namespace: end
 NULL

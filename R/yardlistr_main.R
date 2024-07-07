@@ -36,10 +36,10 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # list of unique checklist
   checklists <- dat |>
-    select(datetime, complete) |>
+    select("datetime", "complete") |>
     dplyr::distinct()
   complete <- checklists |>
-    filter(complete == 1)
+    filter(.data$complete == 1)
   # tibble to store count by timepoint
   yardcount <- tibble::tibble(
     observation = seq_len(dim(checklists)[1]),
@@ -61,7 +61,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   for (i in seq_len(dim(checklists)[1])) {
     # get list of species' at current timepoint
     current_species <- dat |>
-      filter(datetime == tibble::deframe(checklists[i, "datetime"])) |>
+      filter(.data$datetime == tibble::deframe(checklists[i, "datetime"])) |>
       select(c("species", "taxon")) |>
       dplyr::distinct()
     # check if any of them have not been seen before
@@ -94,8 +94,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # count checklists for each timeunit
   checklists_per_timeunit <- dat |>
-    select(datetime, month_tetrad) |>
-    dplyr::group_by(month_tetrad) |>
+    select("datetime", "month_tetrad") |>
+    dplyr::group_by(.data$month_tetrad) |>
     dplyr::distinct() |>
     dplyr::count() |>
     dplyr::ungroup()
@@ -104,14 +104,17 @@ yardlistr <- function(location, dir_dat, dir_img) {
       dplyr::anti_join(
         x = timeunits,
         y = checklists_per_timeunit,
-        by = "month_tetrad"
+        by = dplyr::join_by("month_tetrad")
       ),
       by = c("month_tetrad", "n")
     ) |>
-    mutate(frequency = n / max(n, na.rm = TRUE)) |>
-    dplyr::arrange(month_tetrad) |>
-    select(c(month_tetrad, frequency)) |>
-    tidyr::pivot_wider(names_from = month_tetrad, values_from = frequency) |>
+    mutate(frequency = .data$n / max(.data$n, na.rm = TRUE)) |>
+    dplyr::arrange(.data$month_tetrad) |>
+    select(c("month_tetrad", "frequency")) |>
+    tidyr::pivot_wider(
+      names_from = "month_tetrad",
+      values_from = "frequency"
+    ) |>
     tibble::add_column(
       species = c("Checklists"),
       taxon = c(0)
@@ -127,7 +130,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
     dplyr::bind_cols(
       matrix(NA, nrow = dim(yardlist)[1], ncol = n_timeunits)
     ) |>
-    dplyr::arrange(taxon) |>
+    dplyr::arrange(.data$taxon) |>
     suppressMessages()
 
   # rename columns to numbers
@@ -139,38 +142,38 @@ yardlistr <- function(location, dir_dat, dir_img) {
     # filter out current timeunits's data
     dat_timeunit <- dat |>
       filter(
-        month_tetrad == tibble::deframe(timeunits[i, "month_tetrad"])
+        .data$month_tetrad == tibble::deframe(timeunits[i, "month_tetrad"])
       )
 
     # count number of checklists during timeunit
     n_checklists <- dat_timeunit |>
-      select(datetime) |>
+      select("datetime") |>
       unique_values() |>
       length()
 
     # normalize species frequency to checklist number
     dat_timeunit <- dat_timeunit |>
-      dplyr::add_count(species) |>
-      mutate(frequency = n / n_checklists) |>
-      select(c(species, taxon, frequency)) |>
+      dplyr::add_count(.data$species) |>
+      mutate(frequency = .data$n / n_checklists) |>
+      select(c("species", "taxon", "frequency")) |>
       dplyr::distinct()
 
     # add species not seen in current tetrad
     dat_timeunit <- dat_timeunit |>
       dplyr::full_join(
         yardlist |> dplyr::anti_join(dat_timeunit, by = c("species", "taxon")),
-        by = c("species", "taxon")
+        by = dplyr::join_by("species", "taxon")
       ) |>
-      dplyr::arrange(taxon)
+      dplyr::arrange(.data$taxon)
 
     # convert NAs to 0 if at least one checklist present in current tetrad
     if (n_checklists > 0) {
       dat_timeunit <- dat_timeunit |>
-        mutate(frequency = tidyr::replace_na(frequency, 0))
+        mutate(frequency = tidyr::replace_na(.data$frequency, 0))
     }
 
     frequency_per_timeunit[, i + length(columns_kept)] <- dat_timeunit |>
-      select(frequency) |>
+      select("frequency") |>
       tibble::deframe()
   }
 
@@ -182,13 +185,13 @@ yardlistr <- function(location, dir_dat, dir_img) {
       names_to = "month_tetrad",
       values_to = "frequency"
     ) |>
-    dplyr::arrange(taxon) |>
+    dplyr::arrange(.data$taxon) |>
     mutate(
-      species = species |> forcats::as_factor() |> forcats::fct_rev(),
-      frequency = as.numeric(frequency)
+      species = .data$species |> forcats::as_factor() |> forcats::fct_rev(),
+      frequency = as.numeric(.data$frequency)
     ) |>
     dplyr::left_join(timeunits, by = c("month_tetrad")) |>
-    select(-n)
+    select(-c("n"))
 
 
   # frequency ranking -------------------------------------------------------
@@ -211,17 +214,16 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # get overall frequency
   frequency_year <- dat |>
     filter(complete == 1) |>
-    dplyr::count(species, taxon) |>
-    dplyr::full_join(yardlist, by = c("species", "taxon")) |>
+    dplyr::count(.data$species, .data$taxon) |>
+    dplyr::full_join(yardlist, by = dplyr::join_by("species", "taxon")) |>
     tidyr::replace_na(list(n = 0)) |>
-    dplyr::arrange(dplyr::desc(n), taxon) |>
+    dplyr::arrange(dplyr::desc(.data$n), .data$taxon) |>
     mutate(
-      species = species |> forcats::as_factor() |> forcats::fct_rev(),
-      frequency = n / complete |>
-        select(datetime) |>
+      species = .data$species |> forcats::as_factor() |> forcats::fct_rev(),
+      frequency = .data$n / complete |>
+        select("datetime") |>
         tibble::deframe() |>
-        length(),
-      frequency
+        length()
     )
 
 
@@ -267,7 +269,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # plotting ----------------------------------------------------------------
 
   plot_count_time <- yardcount |>
-    ggplot(aes(x = datetime, y = species_num)) +
+    ggplot(aes(x = .data$datetime, y = .data$species_num)) +
     geom_step(linewidth = 1, color = clr) +
     labs(
       title = paste0("Yard list at ", location),
@@ -290,7 +292,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
 
   plot_count_lists <- yardcount |>
-    ggplot(aes(x = observation, y = species_num)) +
+    ggplot(aes(x = .data$observation, y = .data$species_num)) +
     geom_step(linewidth = 1, color = clr) +
     labs(
       title = paste0("Yard list at ", location),
@@ -312,8 +314,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
   )
 
   plot_time_of_day <- checklists |>
-    mutate(time = datetime |> get_time()) |>
-    ggplot(aes(x = time)) +
+    mutate(time = .data$datetime |> get_time()) |>
+    ggplot(aes(x = .data$time)) +
     stat_bin(
       geom = "bar",
       boundary = lubridate::hms("00:00:00"),
@@ -348,11 +350,15 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # plot heatmap
   plot_heatmap <- frequency_per_timeunit |>
     mutate(
-      month_label = lubridate::month(month, label = TRUE) |>
+      month_label = lubridate::month(.data$month, label = TRUE) |>
         forcats::as_factor()
     ) |>
-    ggplot(aes(x = tetrad, y = species, fill = frequency)) +
-    facet_grid(cols = vars(month_label), scales = "free_x", switch = "x") +
+    ggplot(aes(x = .data$tetrad, y = .data$species, fill = .data$frequency)) +
+    facet_grid(
+      cols = vars(.data$month_label),
+      scales = "free_x",
+      switch = "x"
+    ) +
     geom_raster() +
     scale_x_continuous(expand = c(0, 0)) +
     scale_y_discrete(expand = c(0, 0)) +
@@ -397,7 +403,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # frequency plot
   plot_frequency <- frequency_year |>
-    ggplot(aes(x = frequency, y = species)) +
+    ggplot(aes(x = .data$frequency, y = .data$species)) +
     scale_x_continuous(
       position = "top",
       limits = plot_frequency_xlim,
@@ -406,7 +412,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
     ) +
     geom_col(fill = clr) +
     geom_text(
-      aes(label = scales::label_percent(accuracy = 0.01)(frequency)),
+      aes(label = scales::label_percent(accuracy = 0.01)(.data$frequency)),
       nudge_x = 0.1,
       color = "grey30"
     ) +

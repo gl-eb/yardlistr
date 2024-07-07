@@ -29,7 +29,7 @@ tetrad <- function(x, method = "ebird") {
     # the "ebird" method takes day 1-7 as tetrad 1, 8-14 as tetrad 2, 15-21 as
     # tetrad 3 and >21 as tetrad 4. This method is employed by the Cornell Lab
     # of Ornithology in their bar charts on the eBird platform
-    tetrads <- ceiling(lubridate::day(x) / 7) %>% replace(. == 5, 4)
+    tetrads <- ceiling(lubridate::day(x) / 7) |> {\(x) replace(x, x == 5, 4)}()
   }
 }
 
@@ -62,20 +62,20 @@ clean_ebird_data <- function(data_file, yard_location,
       "complete" = "All Obs Reported"
     ) |>
     filter(
-      !stringr::str_detect(scientific, "sp.") & # filter out spuhs
-      !stringr::str_detect(scientific, "/") # filter out slashes
+      !stringr::str_detect(.data$scientific, "sp.") & # filter out spuhs
+      !stringr::str_detect(.data$scientific, "/") # filter out slashes
     ) |>
     tidyr::drop_na(tidyselect::any_of(c("Date", "Time"))) |>
-    tidyr::unite("datetime", Date:Time, sep = " ") |>
-    dplyr::arrange(datetime) |>
+    tidyr::unite("datetime", "Date":"Time", sep = " ") |>
+    dplyr::arrange(.data$datetime) |>
     select(c("common", "scientific", "taxon", "datetime", "complete")) |>
     mutate(
-      datetime = datetime |> lubridate::ymd_hms(),
-      # week = lubridate::isoweek(datetime),
-      tetrad = tetrad(datetime),
-      month = lubridate::month(datetime),
-      scientific = stringr::str_replace(scientific, "^", "("),
-      scientific = stringr::str_replace(scientific, "$", ")")
+      datetime = .data$datetime |> lubridate::ymd_hms(),
+      week = lubridate::isoweek(.data$datetime),
+      tetrad = tetrad(.data$datetime),
+      month = lubridate::month(.data$datetime),
+      scientific = stringr::str_replace(.data$scientific, "^", "("),
+      scientific = stringr::str_replace(.data$scientific, "$", ")")
     ) |>
     tidyr::unite("species", c("common", "scientific"), sep = " ") |>
     tidyr::unite("month_tetrad", c("month", "tetrad"), remove = FALSE)
@@ -83,7 +83,7 @@ clean_ebird_data <- function(data_file, yard_location,
 
 # check if specified location is present in data
 check_location <- function(raw_dat, yard_location, call) {
-  dat_location <- raw_dat |> filter(Location == yard_location)
+  dat_location <- raw_dat |> filter(.data$Location == yard_location)
 
   if (dim(dat_location)[1] == 0) {
     cli::cli_abort(
