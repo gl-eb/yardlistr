@@ -9,8 +9,6 @@
 #' @return A list containing the tibbles used to generate plots
 #' @export
 #'
-#' @import ggplot2
-#'
 #' @examples
 #' \dontrun{
 #'   yardlistr("My Location", "./Data", "./Plots")
@@ -217,7 +215,7 @@ yardlistr <- function(location, dir_dat, dir_img) {
   clr <- viridisLite::mako(1, begin = 0.7)
 
   # define common theme used for all plots
-  theme_light(13) |> theme_set()
+  ggplot2::theme_light(13) |> ggplot2::theme_set()
 
   # height of plot upon export scales with number of species
   plot_height <- max(10, round(dim(yardlist)[1] / 10) * 5)
@@ -230,14 +228,14 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # plotting ----------------------------------------------------------------
 
   plot_count_time <- yardcount |>
-    ggplot(aes(x = .data$datetime, y = .data$species_num)) +
-    geom_step(linewidth = 1, color = clr) +
-    labs(
+    ggplot2::ggplot(aes(x = .data$datetime, y = .data$species_num)) +
+    ggplot2::geom_step(linewidth = 1, color = clr) +
+    ggplot2::labs(
       title = paste0("Yard list at ", location),
       x = "Date",
       y = "Species"
     )
-  ggsave(
+  ggplot2::ggsave(
     filename = fs::path(
       dir_img,
       paste0(location_short, "_time"),
@@ -253,14 +251,14 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
 
   plot_count_lists <- yardcount |>
-    ggplot(aes(x = .data$observation, y = .data$species_num)) +
-    geom_step(linewidth = 1, color = clr) +
-    labs(
+    ggplot2::ggplot(aes(x = .data$observation, y = .data$species_num)) +
+    ggplot2::geom_step(linewidth = 1, color = clr) +
+    ggplot2::labs(
       title = paste0("Yard list at ", location),
       x = "Checklists",
       y = "Species"
     )
-  ggsave(
+  ggplot2::ggsave(
     filename = fs::path(
       dir_img,
       paste0(location_short, "_lists"),
@@ -276,8 +274,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   plot_time_of_day <- checklists |>
     mutate(time = .data$datetime |> get_time()) |>
-    ggplot(aes(x = .data$time)) +
-    stat_bin(
+    ggplot2::ggplot(aes(x = .data$time)) +
+    ggplot2::stat_bin(
       geom = "bar",
       boundary = lubridate::hms("00:00:00"),
       closed = "left",
@@ -285,16 +283,16 @@ yardlistr <- function(location, dir_dat, dir_img) {
       fill = clr,
       color = "grey13"
     ) +
-    scale_x_time(
+    ggplot2::scale_x_time(
       limits = c(lubridate::hms("00:00:00"), lubridate::hms("24:00:00")),
       breaks = scales::breaks_width("4 hours"),
       labels = scales::label_time(format = "%H:%M")
     ) +
-    labs(x = "Time of Day") +
-    theme(
+    ggplot2::labs(x = "Time of Day") +
+    ggplot2::theme(
       axis.title.y = element_blank()
     )
-  ggsave(
+  ggplot2::ggsave(
     filename = fs::path(
       dir_img,
       paste0(location_short, "_time-of-day"),
@@ -314,39 +312,39 @@ yardlistr <- function(location, dir_dat, dir_img) {
       month_label = lubridate::month(.data$month, label = TRUE) |>
         forcats::as_factor()
     ) |>
-    ggplot(aes(x = .data$tetrad, y = .data$species, fill = .data$frequency)) +
-    facet_grid(
-      cols = vars(.data$month_label),
+    ggplot2::ggplot(aes(x = .data$tetrad, y = .data$species, fill = .data$frequency)) +
+    ggplot2::facet_grid(
+      cols = ggplot2::vars(.data$month_label),
       scales = "free_x",
       switch = "x"
     ) +
-    geom_raster() +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_discrete(expand = c(0, 0)) +
-    scale_fill_viridis_c(
+    ggplot2::geom_raster() +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_discrete(expand = c(0, 0)) +
+    ggplot2::scale_fill_viridis_c(
       option = "mako",
       na.value = "#00000000",
       direction = -1
     ) +
-    labs(
+    ggplot2::labs(
       x = "Tetrad",
       fill = "Frequency",
       title = "Species occurence by tetrad",
       subtitle = location
     ) +
-    theme_minimal(13) +
-    theme(
-      plot.background = element_rect(fill = "white"),
-      panel.spacing = unit(0, "null"),
+    ggplot2::theme_minimal(13) +
+    ggplot2::theme(
+      plot.background = ggplot2::element_rect(fill = "white"),
+      panel.spacing = grid::unit(0, "null"),
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
       strip.placement = "outside",
-      strip.text = element_text(size = 11),
+      strip.text = ggplot2::element_text(size = 11),
       legend.position = "right",
       axis.text.x = element_blank(),
       axis.title = element_blank()
     )
-  ggsave(
+  ggplot2::ggsave(
     filename = fs::path(
       dir_img,
       paste0(location_short, "_heatmap"),
@@ -365,29 +363,29 @@ yardlistr <- function(location, dir_dat, dir_img) {
 
   # frequency plot
   plot_frequency <- frequency_year |>
-    ggplot(aes(x = .data$frequency, y = .data$species)) +
-    scale_x_continuous(
+    ggplot2::ggplot(aes(x = .data$frequency, y = .data$species)) +
+    ggplot2::scale_x_continuous(
       position = "top",
       limits = plot_frequency_xlim,
       breaks = seq(0, 1, 0.25),
       labels = scales::percent
     ) +
-    geom_col(fill = clr) +
-    geom_text(
+    ggplot2::geom_col(fill = clr) +
+    ggplot2::geom_text(
       aes(label = scales::label_percent(accuracy = 0.01)(.data$frequency)),
       nudge_x = 0.1,
       color = "grey30"
     ) +
-    labs(
+    ggplot2::labs(
       title = "Species frequency in complete checklists",
       subtitle = location
     ) +
-    theme(
-      plot.title = element_text(hjust = 1),
-      plot.subtitle = element_text(hjust = 1),
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(hjust = 1),
+      plot.subtitle = ggplot2::element_text(hjust = 1),
       axis.title = element_blank()
     )
-  ggsave(
+  ggplot2::ggsave(
     filename = fs::path(
       dir_img,
       paste0(location_short, "_frequency"),
