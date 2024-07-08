@@ -646,21 +646,6 @@
       ],
       "Hash": "d55aa087c47a63ead0f6fc10f8fa1ee0"
     },
-    "httr": {
-      "Package": "httr",
-      "Version": "1.4.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "R6",
-        "curl",
-        "jsonlite",
-        "mime",
-        "openssl"
-      ],
-      "Hash": "ac107251d9d9fd72f0ca8049988f1d7f"
-    },
     "httr2": {
       "Package": "httr2",
       "Version": "1.0.1",
@@ -722,7 +707,7 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.47",
+      "Version": "1.48",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -734,7 +719,7 @@
         "xfun",
         "yaml"
       ],
-      "Hash": "7c99b2d55584b982717fcc0950378612"
+      "Hash": "acf380f300c721da9fde7df115a5f86f"
     },
     "labeling": {
       "Package": "labeling",
@@ -938,7 +923,7 @@
     },
     "pkgdown": {
       "Package": "pkgdown",
-      "Version": "2.0.9",
+      "Version": "2.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -949,11 +934,11 @@
         "desc",
         "digest",
         "downlit",
+        "fontawesome",
         "fs",
-        "httr",
+        "httr2",
         "jsonlite",
-        "magrittr",
-        "memoise",
+        "openssl",
         "purrr",
         "ragg",
         "rlang",
@@ -964,7 +949,7 @@
         "xml2",
         "yaml"
       ],
-      "Hash": "8bf1151ed1a48328d71b937e651117a6"
+      "Hash": "0d3d789055c873f48521ce7e23c23f48"
     },
     "pkgload": {
       "Package": "pkgload",
