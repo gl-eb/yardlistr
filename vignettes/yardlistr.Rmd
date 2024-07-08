@@ -19,8 +19,7 @@ knitr::opts_chunk$set(
 First of all, you will need to [export your eBird data](https://ebird.org/downloadMyData).
 You will receive an email with a zip file.
 When extracted, your data will be in comma-separated format (.csv).
-Yardlistr will always choose the last .csv file in the data directory in ascending alphanumeric order,
-allowing you to have multiple files.
+Yardlistr will always choose the last .csv file in the data directory in ascending alphanumeric order.
 
 This example illustrates file selection.
 Say you have the following three files in your data directory:
@@ -30,7 +29,7 @@ Say you have the following three files in your data directory:
 2022-06-01_ebird.csv
 2021-04-16_ebird.csv
 ```
-In ascending alphanumeric order, file ```2022-08-02_ebird.csv``` is last and will thus be imported by yardlistr.
+In ascending alphanumeric order, file ```2022-08-02_ebird.csv``` is last and will thus be used by yardlistr.
 
 ## Plotting Data
 
