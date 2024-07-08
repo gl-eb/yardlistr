@@ -1,0 +1,40 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# yardlistr
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/gl-eb/yardlistr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gl-eb/yardlistr/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+The yardlistr package reads your eBird data and produces a number of different plots for a specified location,
+e.g. your yard (hence the package name)
+
+**Warning**: This package is under development and is provided as is without any guarantees.
+It lacks flexibility and robustenss in various aspects.
+If you have questions, issues or suggestions, feel free to open a GitHub issue or pull request.
+
+## Installation
+
+You can install the development version of yardlistr from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("gl-eb/yardlistr")
+```
+
+## How to Use
+
+See `vignette("yardlistr")` for instructions.
