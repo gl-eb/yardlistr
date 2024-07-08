@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.1.0
+pkgdown_sha: ~
+articles:
+  yardlistr: yardlistr.html
+last_built: 2024-07-08T07:27Z
+urls:
+  reference: https://www.gl-eb.me/yardlistr/reference
+  article: https://www.gl-eb.me/yardlistr/articles
