@@ -1,5 +1,7 @@
 # yardlistr (development version)
 
+- Refactor code
+
 # yardlistr 0.2.0
 
 - Export `clean_ebird_data()` and `tetrad()`
