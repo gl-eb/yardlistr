@@ -67,8 +67,7 @@ select_file <- function(dir_dat) {
 #' @param call The environment from which the function is called
 #' @returns Tibble in tidy data format
 #' @export
-clean_ebird_data <- function(file_data, location,
-                             call = rlang::caller_env()) {
+clean_ebird_data <- function(file_data, location, call = rlang::caller_env()) {
   # import latest ebird data
   raw_dat <- file_data |>
     readr::read_csv(show_col_types = FALSE) |>
