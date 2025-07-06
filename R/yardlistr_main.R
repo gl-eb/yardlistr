@@ -223,6 +223,9 @@ yardlistr <- function(location, dir_dat, dir_img) {
     ggplot2::theme_light(13) |> ggplot2::theme_set()
   }
 
+  # get text color from theme
+  clr_text <- ggplot2::theme_get() |> purrr::pluck("axis.text", "colour")
+
   # height of plot upon export scales with number of species
   plot_height <- max(10, round(dim(yardlist)[1] / 10) * 5)
 
@@ -338,15 +341,20 @@ yardlistr <- function(location, dir_dat, dir_img) {
       title = "Species occurence by tetrad",
       subtitle = location
     ) +
-    ggplot2::theme_minimal(13) +
     ggplot2::theme(
-      plot.background = ggplot2::element_rect(fill = "white"),
+      panel.border = element_blank(),
       panel.spacing = grid::unit(0, "null"),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      strip.background = element_blank(),
       strip.placement = "outside",
-      strip.text = ggplot2::element_text(size = 11),
+      strip.text = ggplot2::element_text(
+        size = 11,
+        color = clr_text
+      ),
       legend.position = "right",
+      axis.ticks = element_blank(),
+      axis.text = ggplot2::element_text(color = clr_text),
       axis.text.x = element_blank(),
       axis.title = element_blank()
     )
