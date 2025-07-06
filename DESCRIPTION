@@ -1,7 +1,7 @@
 Type: Package
 Package: yardlistr
 Title: Generate Summary Plots from eBird Data
-Version: 0.2.0.9000
+Version: 0.3.0
 Authors@R:
     person("Gleb G.", "Ebert", , "dev@gl-eb.me", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-7734-3824"))
