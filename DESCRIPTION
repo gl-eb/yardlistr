@@ -19,6 +19,7 @@ Imports:
     forcats,
     fs,
     ggplot2,
+    glebrt (>= 0.4.0.9000),
     glue,
     lifecycle,
     lubridate,
@@ -42,3 +43,5 @@ LazyData: true
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+Remotes:
+    gl-eb/glebrt

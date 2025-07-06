@@ -238,10 +238,16 @@ yardlistr <- function(location, dir_dat, dir_img) {
   plot_count_time <- yardcount |>
     ggplot2::ggplot(aes(x = .data$datetime, y = .data$species_num)) +
     ggplot2::geom_step(linewidth = 1, color = clr) +
+    ggplot2::scale_y_continuous(
+      breaks = glebrt::breaks_limits(yardcount$species_num)
+    ) +
     ggplot2::labs(
       title = paste0("Yard list at ", location),
       x = "Date",
       y = "Species"
+    ) +
+    ggplot2::theme(
+      panel.grid.minor = element_blank()
     )
   ggplot2::ggsave(
     filename = fs::path(
@@ -260,10 +266,19 @@ yardlistr <- function(location, dir_dat, dir_img) {
   plot_count_lists <- yardcount |>
     ggplot2::ggplot(aes(x = .data$observation, y = .data$species_num)) +
     ggplot2::geom_step(linewidth = 1, color = clr) +
+    ggplot2::scale_x_continuous(
+      breaks = glebrt::breaks_limits(c(0, yardcount$observation))
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = glebrt::breaks_limits(yardcount$species_num)
+    ) +
     ggplot2::labs(
       title = paste0("Yard list at ", location),
       x = "Checklists",
       y = "Species"
+    ) +
+    ggplot2::theme(
+      panel.grid.minor = element_blank()
     )
   ggplot2::ggsave(
     filename = fs::path(
@@ -293,11 +308,18 @@ yardlistr <- function(location, dir_dat, dir_img) {
     ggplot2::scale_x_time(
       limits = c(lubridate::hms("00:00:00"), lubridate::hms("24:00:00")),
       breaks = scales::breaks_width("4 hours"),
-      labels = scales::label_time(format = "%H:%M")
+      labels = scales::label_time(format = "%H:%M"),
+      expand = ggplot2::expansion(mult = 0.02)
     ) +
-    ggplot2::labs(x = "Time of Day") +
+    ggplot2::scale_y_continuous(
+      expand = ggplot2::expansion(mult = c(0, 0.05))
+    ) +
+    ggplot2::labs(
+      x = "Time of Day",
+      y = "Checklists"
+    ) +
     ggplot2::theme(
-      axis.title.y = element_blank()
+      panel.grid.major.x = element_blank()
     )
   ggplot2::ggsave(
     filename = fs::path(
@@ -382,7 +404,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
       position = "top",
       limits = plot_frequency_xlim,
       breaks = seq(0, 1, 0.25),
-      labels = scales::percent
+      labels = scales::percent,
+      expand = ggplot2::expansion(mult = c(0, 0.05))
     ) +
     ggplot2::geom_col(fill = clr) +
     ggplot2::geom_text(
@@ -397,7 +420,9 @@ yardlistr <- function(location, dir_dat, dir_img) {
     ggplot2::theme(
       plot.title = ggplot2::element_text(hjust = 1),
       plot.subtitle = ggplot2::element_text(hjust = 1),
-      axis.title = element_blank()
+      panel.grid = element_blank(),
+      axis.title = element_blank(),
+      axis.ticks.y = element_blank()
     )
   ggplot2::ggsave(
     filename = fs::path(
