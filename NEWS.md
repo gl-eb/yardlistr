@@ -1,5 +1,6 @@
 # yardlistr (development version)
 
+- Use globally set ggplot2 theme (see `ggplot2::theme_set()`). Fall back to `ggplot2::theme_minimal()` if none set
 - Refactor code
 
 # yardlistr 0.2.0

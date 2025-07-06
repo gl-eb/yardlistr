@@ -217,8 +217,11 @@ yardlistr <- function(location, dir_dat, dir_img) {
   # custom color for plot elements
   clr <- viridisLite::mako(1, begin = 0.7)
 
-  # define common theme used for all plots
-  ggplot2::theme_light(13) |> ggplot2::theme_set()
+  # define common theme used for all plots if user has not set global theme
+  no_theme_set <- all.equal(ggplot2::theme_get(), ggplot2::theme_grey())
+  if (is.logical(no_theme_set) & isTRUE(no_theme_set)) {
+    ggplot2::theme_light(13) |> ggplot2::theme_set()
+  }
 
   # height of plot upon export scales with number of species
   plot_height <- max(10, round(dim(yardlist)[1] / 10) * 5)
