@@ -224,10 +224,8 @@ yardlistr <- function(location, dir_dat, dir_img) {
   plot_height <- max(10, round(dim(yardlist)[1] / 10) * 5)
 
   # short location name for file names
-  location_short <- stringr::str_split(
-    location,
-    stringr::boundary("word")
-  )[[1]][1]
+  location_short <- stringr::str_split(location, stringr::boundary("word")) |>
+    purrr::pluck(1, 1)
 
   # plotting ----------------------------------------------------------------
 
