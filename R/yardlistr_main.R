@@ -52,7 +52,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
     complete = checklists$complete
   )
 
-
   # yardlist ----------------------------------------------------------------
 
   # tibble to store observed species
@@ -84,16 +83,15 @@ yardlistr <- function(location, dir_dat, dir_img) {
     }
   }
 
-
   # heatmap -----------------------------------------------------------------
 
   # list of time units
   n_timeunits <- 48
   timeunits <- tibble::tibble(
-      month = rep(seq_len(12), each = 4),
-      tetrad = rep(seq_len(4), 12),
-      n = rep(NA, n_timeunits)
-    ) |>
+    month = rep(seq_len(12), each = 4),
+    tetrad = rep(seq_len(4), 12),
+    n = rep(NA, n_timeunits)
+  ) |>
     tidyr::unite("month_tetrad", c("month", "tetrad"), remove = FALSE)
 
   # count checklists for each timeunit
@@ -196,7 +194,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
     dplyr::left_join(timeunits, by = c("month_tetrad")) |>
     select(-c("n"))
 
-
   # frequency ranking -------------------------------------------------------
 
   # get overall frequency
@@ -208,12 +205,12 @@ yardlistr <- function(location, dir_dat, dir_img) {
     dplyr::arrange(dplyr::desc(.data$n), .data$taxon) |>
     mutate(
       species = .data$species |> forcats::as_factor() |> forcats::fct_rev(),
-      frequency = .data$n / complete |>
-        select("datetime") |>
-        tibble::deframe() |>
-        length()
+      frequency = .data$n /
+        complete |>
+          select("datetime") |>
+          tibble::deframe() |>
+          length()
     )
-
 
   # plotting parameters -----------------------------------------------------
 
@@ -227,9 +224,10 @@ yardlistr <- function(location, dir_dat, dir_img) {
   plot_height <- max(10, round(dim(yardlist)[1] / 10) * 5)
 
   # short location name for file names
-  location_short <-
-    stringr::str_split(location, stringr::boundary("word"))[[1]][1]
-
+  location_short <- stringr::str_split(
+    location,
+    stringr::boundary("word")
+  )[[1]][1]
 
   # plotting ----------------------------------------------------------------
 
@@ -254,7 +252,6 @@ yardlistr <- function(location, dir_dat, dir_img) {
     units = "cm",
     dpi = 300
   )
-
 
   plot_count_lists <- yardcount |>
     ggplot2::ggplot(aes(x = .data$observation, y = .data$species_num)) +
