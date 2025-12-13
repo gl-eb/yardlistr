@@ -1,3 +1,5 @@
+# yardlistr (development version)
+
 # yardlistr 0.3.1
 
 - Require ggplot2 3.5.2 (or lower) until `yardlistr` is compatible with ggplot2 >= 4.0.0
